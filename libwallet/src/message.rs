@@ -22,7 +22,8 @@ use crate::Error;
 
 use serde::{Deserialize, Serialize};
 
-use rand::{thread_rng, Rng};
+use rand::rng;
+use rand::Rng;
 use ring::aead;
 use ring::pbkdf2;
 
@@ -49,8 +50,8 @@ impl EncryptedMessage {
 		let common_secret_ser = common_secret.serialize_vec(&secp, true);
 		let common_secret_slice = &common_secret_ser[1..33];
 
-		let salt: [u8; 8] = thread_rng().gen();
-		let nonce: [u8; 12] = thread_rng().gen();
+		let salt: [u8; 8] = rng().random();
+		let nonce: [u8; 12] = rng().random();
 		let mut key = [0; 32];
 
 		pbkdf2::derive(

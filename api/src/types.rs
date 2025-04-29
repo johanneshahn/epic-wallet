@@ -24,7 +24,9 @@ use ed25519_dalek::PublicKey as DalekPublicKey;
 use serde_json::{self, Value};
 use std::collections::HashMap;
 
-use rand::{thread_rng, Rng};
+use rand::rng;
+use rand::Rng;
+
 use ring::aead;
 
 /// Wrapper for API Tokens
@@ -73,7 +75,7 @@ impl EncryptedBody {
 			.as_bytes()
 			.to_vec();
 
-		let nonce: [u8; 12] = thread_rng().gen();
+		let nonce: [u8; 12] = rng().random();
 
 		let unbound_key = aead::UnboundKey::new(&aead::AES_256_GCM, &enc_key.0).unwrap();
 		let sealing_key: aead::LessSafeKey = aead::LessSafeKey::new(unbound_key);
